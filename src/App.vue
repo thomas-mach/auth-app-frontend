@@ -35,7 +35,7 @@ import Header from "./components/Header.vue";
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-image: url(images/bg-stars.svg);
+  background-image: url(/images/bg-stars.svg);
   height: 100%;
 }
 
