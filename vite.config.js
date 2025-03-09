@@ -3,7 +3,6 @@ import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
   plugins: [vue()],
-  build: {
-    base: "/auth-app-frontend/", // Il nome del tuo repository GitHub
-  },
+  base: "/",
+  build: {},
 });
