@@ -9,6 +9,7 @@
 - 🔄 Recupero password e aggiornamento password
 - 🗑️ Cancellazione account con soft delete
 - ✅ Validazione avanzata dei form
+- 📱 **Design responsive mobile-first** per garantire una buona esperienza utente su dispositivi mobili e desktop.
 - 🎨 Massima attenzione all'UX
 
 ## 🛠️ Tecnologie Utilizzate
@@ -22,7 +23,7 @@
 
 ## 📸 Screenshot
 
-![Screenshot](./src/images/auth-app.png)
+![Screenshot](./images/auth-app.png)
 
 ## 🔗 Link al Progetto
 
