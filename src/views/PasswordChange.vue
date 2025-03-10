@@ -364,7 +364,7 @@ input:focus {
 }
 
 .message-placeholder {
-  height: var(--fs-body);
+  min-height: var(--fs-body);
   margin: 0.5em 0 0.5em;
   color: var(--clr-error);
 }

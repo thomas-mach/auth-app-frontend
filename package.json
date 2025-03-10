@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build --base=/auth-app-frontend/",
     "preview": "vite preview",
+    "build": "vite build --base=/auth-app-frontend/",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {

@@ -24,7 +24,7 @@
   max-width: 600px;
   border-radius: 20px;
   padding: 2em;
-  margin-top: 4em;
+  margin-top: 2em;
   display: flex;
   flex-direction: column;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);

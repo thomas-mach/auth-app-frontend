@@ -1,5 +1,29 @@
-# Vue 3 + Vite
+# Auth App - Frontend
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+## 📌 Descrizione
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+**Auth App** è un'applicazione frontend sviluppata con **Vue 3** e **Vite**, progettata per dimostrare le mie capacità di sviluppo. L'app include le seguenti funzionalità:
+
+- 🔑 Registrazione utente
+- 🔓 Login e Logout
+- 🔄 Recupero password e aggiornamento password
+- 🗑️ Cancellazione account con soft delete
+- ✅ Validazione avanzata dei form
+- 🎨 Massima attenzione all'UX
+
+## 🛠️ Tecnologie Utilizzate
+
+- **Vue 3** + **Vite**
+- **Pinia** (per la gestione dello stato)
+- **Session Storage** (per la gestione della sessione utente)
+- **Vue Router** (per la gestione delle rotte)
+- **Axios** (per le chiamate API)
+- **CSS** (per lo stile e l'esperienza utente)
+
+## ## Screenshot 📸
+
+![Screenshot](./src/images/auth-app.png)
+
+## 🔗 Link al Progetto
+
+[**Demo Online**](https://thomas-mach.github.io/auth-app-frontend/)
