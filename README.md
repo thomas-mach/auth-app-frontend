@@ -20,7 +20,7 @@
 - **Axios** (per le chiamate API)
 - **CSS** (per lo stile e l'esperienza utente)
 
-## Screenshot 📸
+## 📸 Screenshot
 
 ![Screenshot](./src/images/auth-app.png)
 
