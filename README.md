@@ -23,7 +23,7 @@
 
 ## 📸 Screenshot
 
-![Screenshot](./images/auth-app.png)
+![Screenshot](./src/images/auth-app.png)
 
 ## 🔗 Link al Progetto
 
