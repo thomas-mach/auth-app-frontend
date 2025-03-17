@@ -96,7 +96,10 @@
             class="nav-user__item"
             @click="showUserNav = false"
           >
-            <p class="user-name">{{ authStore.user?.name }}</p>
+            <router-link to="dash-board" class="name-avatar-wrapper">
+              <img :src="authStore.user?.avatar" alt="avatar" />
+              <p class="user-name">{{ authStore.user?.name }}</p>
+            </router-link>
           </li>
           <li v-if="authStore.user?.isLoggedIn" class="nav-user__item">
             <button
@@ -190,6 +193,19 @@ onUnmounted(() => {
   color: var(--clr-light);
   cursor: pointer;
   padding: 0.75em;
+}
+
+.name-avatar-wrapper {
+  display: flex;
+  gap: 0.5em;
+  align-items: center;
+  text-decoration: none;
+  padding: 0.5em;
+}
+
+.name-avatar-wrapper img {
+  width: 2em;
+  height: 2em;
 }
 
 .nav-user,

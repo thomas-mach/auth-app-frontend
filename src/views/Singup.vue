@@ -16,6 +16,28 @@
       </template>
       <template #form>
         <form novalidate @submit.prevent="handleSignup">
+          <p class="avatar-title">Chosse your avatar</p>
+          <!-- INPUT AVATAR -->
+          <div class="avatars-wrapper">
+            <div
+              class="avatar"
+              v-for="(avatar, index) in avatarStore.avatars"
+              :key="index"
+            >
+              <input
+                class="avatar-input"
+                type="radio"
+                :id="index"
+                name="avatar"
+                :value="avatar"
+                v-model="choosenAvatar"
+              />
+              <label class="avatar-label" :for="index">
+                <img class="avatar-img" :src="avatar" />
+              </label>
+            </div>
+          </div>
+          <!-- <input type="text" /> -->
           <!-- INPUT NAME -->
           <label for="name">Name</label>
           <div class="input-wraper">
@@ -135,15 +157,18 @@
 
 <script setup>
 import CardForm from "../components/CardForm.vue";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { signup } from "../api/authService.js";
+import { useAvatarStore } from "../store/storeAuth.js";
 
+const avatarStore = useAvatarStore();
 const icon = ref(["fas", "lock"]);
 const name = ref("");
 const email = ref("");
 const password = ref("");
 const passwordConfirm = ref("");
 const type = ref("password");
+const choosenAvatar = ref("");
 let successMessage = ref("");
 let errorMessage = ref("");
 let errorsBackend = ref([]);
@@ -158,6 +183,7 @@ const handleSignup = async () => {
       email: email.value,
       password: password.value,
       passwordConfirm: passwordConfirm.value,
+      avatar: choosenAvatar.value,
     });
     console.log("Signup success:", data);
     console.log("Response", data.message);
@@ -166,6 +192,7 @@ const handleSignup = async () => {
     email.value = "";
     password.value = "";
     passwordConfirm.value = "";
+    choosAvatar.value = "";
   } catch (error) {
     console.log(error);
     errorMessage.value = error.response.data.message;
@@ -219,6 +246,10 @@ const passwordConfirmValidate = () => {
     passwordConfirm.value === password.value
   );
 };
+
+onMounted(() => {
+  avatarStore.fetchAvatars();
+});
 </script>
 
 <style scoped>
@@ -237,7 +268,8 @@ form {
   flex-direction: column;
 }
 
-label {
+label,
+.avatar-title {
   letter-spacing: 1.3px;
   font-weight: var(--fw-bold);
   color: var(--clr-dark-light);
@@ -256,6 +288,47 @@ label {
   top: 50%;
   transform: translateY(-50%);
   color: var(--clr-dark-light);
+}
+
+.avatars-wrapper {
+  display: flex;
+  margin-top: 0.75em;
+  margin: 0.75em -1em 0;
+  gap: 0.65em;
+  overflow: auto;
+  height: 3.75em;
+  align-items: center;
+  padding: 0 1em;
+  scrollbar-width: none;
+}
+
+.avatar-img {
+  width: 3em;
+  height: 3em;
+}
+.avatar {
+  width: 3em;
+  height: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-label:hover {
+  scale: 1.1;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid var(--clr-accent);
+}
+
+input[type="radio"] {
+  display: none;
+}
+
+input[type="radio"]:checked + label {
+  border: 2px solid var(--clr-accent);
+  scale: 1.1;
+  border-radius: 50%;
 }
 
 input {

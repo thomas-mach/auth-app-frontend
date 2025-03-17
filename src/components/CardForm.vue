@@ -28,10 +28,11 @@
   display: flex;
   flex-direction: column;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+  overflow: auto;
 }
 
 .card-title {
-  font-size: var(--fs-h1);
+  font-size: var(--fs-h2);
   font-weight: var(--fw-bold);
   color: var(--clr-dark);
 }

@@ -107,3 +107,12 @@ export const deleteAccount = async () => {
     throw error;
   }
 };
+
+// export const getAvatars = async () => {
+//   try {
+//     const response = await axios.get(`${API_URL}/avatars`);
+//     return response.data;
+//   } catch (error) {
+//     throw error;
+//   }
+// };

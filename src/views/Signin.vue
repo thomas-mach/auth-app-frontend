@@ -114,10 +114,15 @@ const hendelSignin = async () => {
       email: email.value,
       password: password.value,
     });
+    console.log("signin", response);
     email.value = "";
     password.value = "";
     authMessage.setMessage("You are loged in!");
-    authStore.login({ isLoggedIn: true, name: response.data.user.name });
+    authStore.login({
+      isLoggedIn: true,
+      name: response.data.user.name,
+      avatar: response.data.user.avatar,
+    });
     router.push("/dash-board");
   } catch (err) {
     console.log("Error Response:", err.response);
@@ -173,6 +178,7 @@ const showPassword = () => {
 
 const emailValidate = () => {
   const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  email.value = email.value.trim();
   if (!email.value) {
     emailInputError.value = "The email is required";
     return false;

@@ -1,4 +1,6 @@
 import { defineStore } from "pinia";
+import axios from "axios";
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -23,6 +25,25 @@ export const useMessagesStore = defineStore("messages", {
   actions: {
     setMessage(newMessage) {
       this.message = newMessage;
+    },
+  },
+});
+
+export const useAvatarStore = defineStore("avatarStore", {
+  state: () => ({
+    avatars: [],
+  }),
+  actions: {
+    async fetchAvatars() {
+      try {
+        const response = await axios.get(`${API_URL}/avatars`);
+        console.log(response);
+        this.avatars = response.data.avatars.map(
+          (file) => `http://localhost:3003/avatars/${file}`
+        );
+      } catch (error) {
+        throw error;
+      }
     },
   },
 });
