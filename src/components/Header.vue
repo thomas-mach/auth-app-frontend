@@ -1,11 +1,19 @@
 <template>
   <div class="header">
     <router-link to="/" class="logo">auth-app</router-link>
-    <div class="buttons-wraper" v-if="!isDesktop">
+    <div class="buttons-wraper" v-if="!isDesktop && !showUserNav">
       <button class="nav-user-button">
         <font-awesome-icon
+          v-if="!authStore.user?.isLoggedIn"
           class="user-icon"
           :icon="['fas', 'user']"
+          @click="showUserNav = true"
+        />
+        <img
+          v-if="authStore.user?.isLoggedIn"
+          class="avatar"
+          :src="authStore.user?.avatar"
+          alt="avatar"
           @click="showUserNav = true"
         />
       </button>
@@ -286,6 +294,11 @@ onUnmounted(() => {
   cursor: pointer;
   text-decoration: none;
   padding: 0.25em;
+}
+
+.avatar {
+  width: 2em;
+  height: 2em;
 }
 
 .user-name {
