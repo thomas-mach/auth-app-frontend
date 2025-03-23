@@ -9,7 +9,10 @@
         <router-view />
       </main>
 
-      <footer class="footer">
+      <footer
+        class="footer"
+        :class="useShowHillsStore().isHills ? 'footer-over' : 'footer-under'"
+      >
         <img
           class="hills"
           src="./images/pattern-hills.svg"
@@ -22,12 +25,16 @@
 
 <script setup>
 import Header from "./components/Header.vue";
+import { useShowHillsStore } from "../src/store/storeAuth";
 </script>
 
 <style scoped>
 .app-wrapper {
+  position: fixed;
   width: 100%;
+  height: 100vh;
   background: linear-gradient(#1d1e28, #261a2d);
+  /* overflow: hidden; */
   /* border: 1px solid rgb(144, 234, 0); */
 }
 
@@ -47,8 +54,8 @@ import Header from "./components/Header.vue";
 
 .main {
   width: 100%;
+  max-height: 100%;
   flex-grow: 1;
-  z-index: 200;
   /* border: 1px solid rgb(11, 32, 221); */
 }
 
@@ -56,6 +63,14 @@ import Header from "./components/Header.vue";
   width: 100%;
   position: fixed;
   bottom: 0;
+}
+
+.footer-over {
+  z-index: 100;
+}
+
+.footer-under {
+  z-index: -100;
 }
 
 .hills {

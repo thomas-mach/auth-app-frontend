@@ -10,6 +10,9 @@ import Home from "../views/Home.vue";
 import Contact from "../views/Contact.vue";
 import About from "../views/About.vue";
 import DeleteAccount from "../views/DeleteAccount.vue";
+import AddComment from "../components/AddComment.vue";
+import UserComments from "../components/UserComments.vue";
+import Chat from "../views/Chat.vue";
 
 const routes = [
   { path: "/", component: Home },
@@ -18,6 +21,7 @@ const routes = [
   { path: "/signup", component: Signup },
   { path: "/signin", component: Signin },
   { path: "/password-forgot", component: PasswordForgot },
+  { path: "/chat", component: Chat, meta: { requiresAuth: true } },
   {
     path: "/reset-password",
     name: "reset-password",
@@ -25,7 +29,7 @@ const routes = [
     props: (route) => ({ token: route.query.token }),
   },
   {
-    path: "/dash-board",
+    path: "/dashboard",
     component: DashBoard,
     meta: { requiresAuth: true },
     children: [
@@ -37,6 +41,16 @@ const routes = [
       {
         path: "delete-account",
         component: DeleteAccount,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: "add-comment",
+        component: AddComment,
+        meta: { requiresAuth: true },
+      },
+      {
+        path: "user-comments",
+        component: UserComments,
         meta: { requiresAuth: true },
       },
     ],

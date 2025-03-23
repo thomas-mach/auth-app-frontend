@@ -96,7 +96,8 @@ const emailValidate = () => {
   max-width: 1024px;
   height: 100%;
   display: grid;
-  place-items: center;
+  align-items: start;
+  justify-items: center;
   /* border: 1px solid rgb(1, 2, 7); */
 }
 

@@ -23,7 +23,7 @@
   width: 100%;
   max-width: 600px;
   border-radius: 20px;
-  padding: 2em;
+  padding: 1.25em;
   margin-top: 2em;
   display: flex;
   flex-direction: column;

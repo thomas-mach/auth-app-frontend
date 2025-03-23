@@ -2,14 +2,24 @@
   <div class="wrapper">
     <h2>DASHBOARD</h2>
     <nav>
-      <ul>
+      <ul class="link-wrapper">
         <li>
-          <router-link to="/dash-board/password-change" class="custom-link"
+          <router-link to="/dashboard/add-comment" class="custom-link"
+            >Add comment</router-link
+          >
+        </li>
+        <li>
+          <router-link to="/dashboard/password-change" class="custom-link"
             >Change password</router-link
           >
         </li>
         <li>
-          <router-link to="/dash-board/delete-account" class="custom-link"
+          <router-link to="/dashboard/user-comments" class="custom-link"
+            >My comments</router-link
+          >
+        </li>
+        <li>
+          <router-link to="/dashboard/delete-account" class="custom-link"
             >Delete account</router-link
           >
         </li>
@@ -71,6 +81,11 @@ ul {
 @media (min-width: 768px) {
   .custom-link:hover {
     color: var(--clr-accent);
+  }
+
+  .link-wrapper {
+    display: flex;
+    gap: 1em;
   }
 }
 </style>

@@ -48,3 +48,17 @@ export const useAvatarStore = defineStore("avatarStore", {
     },
   },
 });
+
+export const useShowHillsStore = defineStore("showHills", {
+  state: () => ({
+    isHills: false,
+  }),
+  actions: {
+    showHills() {
+      this.isHills = true;
+    },
+    hideHills() {
+      this.isHills = false;
+    },
+  },
+});

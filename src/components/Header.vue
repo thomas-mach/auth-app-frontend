@@ -54,13 +54,21 @@
               >About</router-link
             >
           </li>
+          <li class="nav__item" @click="showNav = false">
+            <router-link
+              to="/chat"
+              class="custom-link-nav"
+              exact-active-class="active"
+              >Chat</router-link
+            >
+          </li>
           <li
             v-if="isDesktop && authStore.user?.isLoggedIn"
             class="custom-link-nav"
             @click="showUserNav = false"
           >
             <router-link
-              to="/dash-board"
+              to="/dashboard"
               class="custom-link-nav"
               exact-active-class="active"
               >DashBoard</router-link
@@ -104,7 +112,7 @@
             class="nav-user__item"
             @click="showUserNav = false"
           >
-            <router-link to="dash-board" class="name-avatar-wrapper">
+            <router-link to="dashboard" class="name-avatar-wrapper">
               <img :src="authStore.user?.avatar" alt="avatar" />
               <p class="user-name">{{ authStore.user?.name }}</p>
             </router-link>
@@ -122,7 +130,7 @@
             class="nav-user__item"
             @click="showUserNav = false"
           >
-            <router-link to="/dash-board" class="custom-link"
+            <router-link to="/dashboard" class="custom-link"
               >DashBoard</router-link
             >
           </li>
@@ -297,8 +305,8 @@ onUnmounted(() => {
 }
 
 .avatar {
-  width: 2em;
-  height: 2em;
+  width: 2.5em;
+  height: 2.5em;
 }
 
 .user-name {

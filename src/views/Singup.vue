@@ -29,7 +29,7 @@
                 type="radio"
                 :id="index"
                 name="avatar"
-                :value="avatar"
+                :value="index"
                 v-model="choosenAvatar"
               />
               <label class="avatar-label" :for="index">
@@ -37,7 +37,7 @@
               </label>
             </div>
           </div>
-          <!-- <input type="text" /> -->
+
           <!-- INPUT NAME -->
           <label for="name">Name</label>
           <div class="input-wraper">
@@ -157,7 +157,7 @@
 
 <script setup>
 import CardForm from "../components/CardForm.vue";
-import { ref, onMounted } from "vue";
+import { ref, onBeforeMount } from "vue";
 import { signup } from "../api/authService.js";
 import { useAvatarStore } from "../store/storeAuth.js";
 
@@ -168,7 +168,7 @@ const email = ref("");
 const password = ref("");
 const passwordConfirm = ref("");
 const type = ref("password");
-const choosenAvatar = ref("");
+const choosenAvatar = ref(null);
 let successMessage = ref("");
 let errorMessage = ref("");
 let errorsBackend = ref([]);
@@ -192,7 +192,7 @@ const handleSignup = async () => {
     email.value = "";
     password.value = "";
     passwordConfirm.value = "";
-    choosAvatar.value = "";
+    choosenAvatar.value = "";
   } catch (error) {
     console.log(error);
     errorMessage.value = error.response.data.message;
@@ -247,8 +247,8 @@ const passwordConfirmValidate = () => {
   );
 };
 
-onMounted(() => {
-  avatarStore.fetchAvatars();
+onBeforeMount(async () => {
+  await avatarStore.fetchAvatars();
 });
 </script>
 
@@ -259,7 +259,8 @@ onMounted(() => {
   max-width: 1024px;
   height: 100%;
   display: grid;
-  place-items: center;
+  align-items: start;
+  justify-items: center;
   /* border: 1px solid rgb(1, 2, 7); */
 }
 

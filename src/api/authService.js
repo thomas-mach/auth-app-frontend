@@ -108,11 +108,16 @@ export const deleteAccount = async () => {
   }
 };
 
-// export const getAvatars = async () => {
-//   try {
-//     const response = await axios.get(`${API_URL}/avatars`);
-//     return response.data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
+export const getJWT = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/jwt`, {
+      withCredentials: true,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -123,7 +123,7 @@ const hendelSignin = async () => {
       name: response.data.user.name,
       avatar: response.data.user.avatar,
     });
-    router.push("/dash-board");
+    router.push("/dashboard");
   } catch (err) {
     console.log("Error Response:", err.response);
     errorMessage.value = err.response.data.message;
@@ -205,7 +205,8 @@ const passwordValidate = () => {
   max-width: 1024px;
   height: 100%;
   display: grid;
-  place-items: center;
+  align-items: start;
+  justify-items: center;
   /* border: 1px solid rgb(1, 2, 7); */
 }
 

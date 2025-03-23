@@ -3,7 +3,7 @@
     <h2>Are you sure you want to delete your account?</h2>
     <div class="button-wrapper">
       <button class="btn" @click="hendeleDeleteAccount()">Yes</button>
-      <router-link to="/dash-board" class="btn">No</router-link>
+      <router-link to="/dashboard" class="btn">No</router-link>
     </div>
   </div>
 </template>
