@@ -1,28 +1,51 @@
 <template>
-  <h1>Lvie time chat</h1>
-  <input
-    v-model="message"
-    placeholder="Type here..."
-    @keyup.enter="sendMessage"
-  />
-  <button @click="sendMessage">Send</button>
-  <ul>
-    <li v-for="(msg, index) in messages" :key="index">{{ msg }}</li>
-  </ul>
+  <div class="chat-wrapper">
+    <div class="messages-wrapper" ref="chatContainer">
+      <div
+        class="message-wrapper"
+        v-for="(msg, index) in messages"
+        :key="msg._id"
+        :class="userId === msg.sender._id ? 'align-right' : ''"
+      >
+        <div class="header">
+          <div class="sender-avatar-wrapper">
+            <img class="avatar" :src="msg.sender.avatar" alt="" />
+            <p class="name">{{ msg.sender.name }}</p>
+          </div>
+          <p class="date">{{ formatTime(msg.createdAt) }}</p>
+        </div>
+        <p class="message">{{ msg.message }}</p>
+      </div>
+    </div>
+    <div class="input-message-wrapper">
+      <input
+        class="input-message"
+        v-model="message"
+        placeholder="Type here..."
+        @keyup.enter="sendMessage"
+      />
+      <button class="btn" @click="sendMessage">
+        <font-awesome-icon class="send-icon" :icon="['fas', 'paper-plane']" />
+      </button>
+    </div>
+  </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, inject } from "vue";
+import { ref, onMounted, inject, nextTick } from "vue";
 import { getJWT } from "../api/authService";
+import { jwtDecode } from "jwt-decode";
 
 const socket = inject("socket"); // Usa il socket globale dal plugin
 const message = ref("");
 const messages = ref([]);
+const chatContainer = ref(null);
+const userId = ref("");
 
 const sendMessage = () => {
   console.log("sendMessage run...");
   if (message.value.trim() !== "") {
-    if (socket.connected) {
+    if (socket?.connected) {
       socket.emit("message", message.value);
       message.value = "";
     } else {
@@ -31,66 +54,138 @@ const sendMessage = () => {
   }
 };
 
-const receiveMessage = (msg) => {
-  messages.value.push(msg);
+const formatTime = (isoString) => {
+  const date = new Date(isoString);
+  return date.toLocaleTimeString("it-IT", {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 };
 
-const handleGetJWT = async () => {
-  try {
-    const response = await getJWT();
-    console.log("🔑 Token JWT ricevuto:", response);
-    return response.JWT;
-  } catch (error) {
-    console.error("❌ Errore nel recuperare il JWT:", error);
-    if (socket && socket.connected) {
-      socket.disconnect();
-      console.log("⚡ Socket disconnesso a causa di errore nel recupero JWT");
+const scrollToBottom = () => {
+  nextTick(() => {
+    if (chatContainer.value) {
+      chatContainer.value.scrollTop =
+        chatContainer.value.scrollHeight - chatContainer.value.clientHeight;
     }
-    return null;
-  }
+  });
 };
 
-onMounted(async () => {
-  try {
-    const token = await handleGetJWT();
-    if (token) {
-      socket.auth = { token }; // Aggiorna il token nel socket globale
-      if (!socket.connected) {
-        socket.connect(); // Assicura che il socket si connetta
-      }
-
-      socket.on("connect", () => {
-        console.log("🔌 Connesso al server WebSocket con ID:", socket.id);
-      });
-
-      socket.on("message", receiveMessage);
-
-      socket.on("disconnect", () => {
-        console.log("❌ Disconnesso dal server WebSocket");
-      });
-    }
-  } catch (error) {
-    console.error("❌ Errore nella connessione WebSocket:", error);
-  }
-});
-
-onUnmounted(() => {
-  if (socket) {
-    // Rimuovi i listener per evitare duplicazioni
-    socket.off("connect"); // Rimuovi il listener precedente per "connect"
-    socket.off("disconnect"); // Rimuovi il listener precedente per "disconnect"
-    socket.off("message"); // Rimuovi il listener precedente per "message"
-    console.log("💥 Eventi WebSocket rimossi");
-    if (socket.connected) {
-      socket.disconnect();
-      console.log("⚡ Socket disconnesso");
-    }
-  }
+onMounted(() => {
+  socket.on("message", (msg) => {
+    messages.value.push(msg);
+    console.log(msg);
+    scrollToBottom();
+  });
+  // const decoded = jwtDecode(socket.auth.token);
+  // userId.value = decoded.id;
 });
 </script>
 
 <style scoped>
-h1 {
-  color: red;
+.chat-wrapper {
+  width: 90%;
+  height: 100%;
+  max-width: 1224px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  /* border: 1px solid yellow; */
+}
+.messages-wrapper {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 800px;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  overflow-y: auto;
+}
+
+.message-wrapper {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--clr-light-dark);
+  padding: 0.5em;
+  border-radius: 0.75em;
+  word-wrap: break-word;
+}
+
+.message-wrapper:last-child {
+  margin-bottom: 2em;
+}
+
+.input-message-wrapper {
+  height: 10%;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  /* border: 1px solid green; */
+}
+
+.input-message {
+  width: 100%;
+  padding: 1em;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--clr-light-dark);
+}
+
+.input-message:focus {
+  outline: none;
+  background-color: var(--clr-light);
+}
+
+.btn {
+  width: 3.25em;
+  height: 3.25em;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--clr-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.send-icon {
+  color: var(--clr-light);
+  font-size: var(--fs-body);
+  transform: translate(-50% -50%);
+}
+
+.sender-avatar-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+}
+
+.header {
+  display: flex;
+  gap: 1em;
+  justify-content: space-between;
+}
+
+.avatar {
+  width: 1.75em;
+}
+
+.date {
+  font-size: var(--fs-small);
+}
+
+.name {
+  font-size: var(--fs-small);
+  font-weight: var(--fw-bold);
+}
+.message {
+  margin-top: 0.5em;
+}
+
+.align-right {
+  align-self: flex-end;
+  background-color: var(--clr-complementary);
 }
 </style>

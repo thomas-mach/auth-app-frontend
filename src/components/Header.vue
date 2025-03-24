@@ -1,5 +1,5 @@
 <template>
-  <div class="header">
+  <div class="wrapper">
     <router-link to="/" class="logo">auth-app</router-link>
     <div class="buttons-wraper" v-if="!isDesktop && !showUserNav">
       <button class="nav-user-button">
@@ -141,12 +141,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, inject } from "vue";
 import { logout } from "../api/authService.js";
 import { RouterLink } from "vue-router";
 import { useRouter } from "vue-router";
 import { useAuthStore, useMessagesStore } from "../store/storeAuth.js";
+import Cookies from "js-cookie";
 
+const socket = inject("socket");
 const authStore = useAuthStore();
 const messagesStore = useMessagesStore();
 const router = useRouter();
@@ -157,12 +159,28 @@ let isDesktop = ref(window.innerWidth > 768);
 const hendeleLogout = async () => {
   try {
     const response = await logout();
+    Cookies.remove("jwt", { path: "/" });
+    socketDisconnect();
     authStore.login({ isLoggedIn: false });
     messagesStore.setMessage(response.message);
     router.push("/");
     console.log(response);
   } catch (error) {
     console.log(error);
+  }
+};
+
+const socketDisconnect = () => {
+  if (socket) {
+    // Rimuovi i listener per evitare duplicazioni
+    socket.off("connect"); // Rimuovi il listener precedente per "connect"
+    socket.off("disconnect"); // Rimuovi il listener precedente per "disconnect"
+    socket.off("message"); // Rimuovi il listener precedente per "message"
+    console.log("💥 Eventi WebSocket rimossi");
+    if (socket.connected) {
+      socket.disconnect();
+      console.log("⚡ Socket disconnesso");
+    }
   }
 };
 
@@ -180,12 +198,13 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.header {
+.wrapper {
   position: relative;
   max-width: 1224px;
   display: flex;
   align-items: center;
   padding: 1em;
+  margin: 0 auto;
   justify-content: space-between;
   /* border: 1px solid rgb(22, 64, 190); */
 }

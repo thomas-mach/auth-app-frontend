@@ -83,11 +83,14 @@
 
 <script setup>
 import CardForm from "../components/CardForm.vue";
-import { ref } from "vue";
+import { ref, inject } from "vue";
 import { signin, resendEmail } from "../api/authService.js";
 import { useRouter } from "vue-router";
 import { useAuthStore, useMessagesStore } from "../store/storeAuth.js";
+import { getJWT } from "../api/authService";
+import { jwtDecode } from "jwt-decode";
 
+const socket = inject("socket"); // Usa il socket globale dal plugin
 const authStore = useAuthStore();
 const authMessage = useMessagesStore();
 const icon = ref(["fas", "lock"]);
@@ -124,12 +127,49 @@ const hendelSignin = async () => {
       avatar: response.data.user.avatar,
     });
     router.push("/dashboard");
+    socketConnect();
   } catch (err) {
     console.log("Error Response:", err.response);
     errorMessage.value = err.response.data.message;
     isEmailVerified.value = err.response?.data?.isVerified ?? true;
   }
 };
+
+const socketConnect = async () => {
+  try {
+    // const token = await handleGetJWT();
+    // if (token) {
+    //   socket.auth = { token }; // Aggiorna il token nel socket globale
+    if (!socket.connected) {
+      socket.connect(); // Assicura che il socket si connetta
+    } else {
+      // Se è già connesso, disconnetti e riconnetti con il nuovo token
+      socket.disconnect();
+      socket.connect();
+    }
+    // }
+  } catch (error) {
+    console.error("❌ Errore nella connessione WebSocket:", error);
+  }
+};
+
+// const handleGetJWT = async () => {
+//   try {
+//     const response = await getJWT();
+//     console.log("🔑 Token JWT ricevuto:", response);
+//     const decoded = jwtDecode(response.JWT);
+//     console.log("👤 ID Utente:", decoded.id);
+//     // userId.value = decoded.id;
+//     return response.JWT;
+//   } catch (error) {
+//     console.error("❌ Errore nel recuperare il JWT:", error);
+//     if (socket && socket.connected) {
+//       socket.disconnect();
+//       console.log("⚡ Socket disconnesso a causa di errore nel recupero JWT");
+//     }
+//     return null;
+//   }
+// };
 
 const hendleResendEmail = async () => {
   errorsBackend.value = [];

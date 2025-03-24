@@ -9,6 +9,7 @@ import {
   faUser,
   faXmark,
   faTrash,
+  faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 import { faGithub, faLinkedin } from "@fortawesome/free-brands-svg-icons";
 
@@ -23,7 +24,8 @@ library.add(
   faEye,
   faUser,
   faXmark,
-  faTrash
+  faTrash,
+  faPaperPlane
 );
 
 // Esporta l'icona per registrarla nel main.js

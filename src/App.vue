@@ -34,7 +34,6 @@ import { useShowHillsStore } from "../src/store/storeAuth";
   width: 100%;
   height: 100vh;
   background: linear-gradient(#1d1e28, #261a2d);
-  /* overflow: hidden; */
   /* border: 1px solid rgb(144, 234, 0); */
 }
 
@@ -47,15 +46,14 @@ import { useShowHillsStore } from "../src/store/storeAuth";
 }
 
 .header {
-  margin: 0 auto;
   width: 100%;
+  height: 15%;
   /* border: 1px solid rgb(190, 22, 22); */
 }
 
 .main {
   width: 100%;
-  max-height: 100%;
-  flex-grow: 1;
+  height: 85%;
   /* border: 1px solid rgb(11, 32, 221); */
 }
 

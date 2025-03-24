@@ -3,6 +3,8 @@ import { io } from "socket.io-client";
 const SERVER_URL = import.meta.env.VITE_SOCKET_URL;
 
 const socket = io(SERVER_URL, {
+  // autoConnect: false,
+  withCredentials: true,
   reconnection: true,
   reconnectionAttempts: 5,
   reconnectionDelay: 2000,
