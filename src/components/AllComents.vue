@@ -8,7 +8,7 @@
     >
       <div class="header">
         <div class="avatr-name-wrapper">
-          <img :src="comment.author.avatar" alt="" />
+          <img :src="`${API_URL_AVATAR}/${comment.author.avatar}`" alt="" />
           <p class="name">{{ comment.author.name }}</p>
         </div>
         <p class="date">{{ formatDate(comment.createdAt) }}</p>
@@ -22,6 +22,7 @@
 import { getAllComents } from "../api/commentService";
 import { onMounted, ref } from "vue";
 
+const API_URL_AVATAR = import.meta.env.VITE_API_URL_AVATAR;
 const comments = ref([]);
 const handleGetAllComents = async () => {
   try {

@@ -18,6 +18,14 @@ socket.on("disconnect", (reason) => {
   console.warn("⚠️ Socket disconnected:", reason);
 });
 
+const originalOn = socket.on;
+socket.on = function (event, callback) {
+  console.log(`📥 Ricevuto evento: ${event}`);
+  originalOn.call(socket, event, (...args) => {
+    console.log(`📥 Dati ricevuti per "${event}":`, args);
+    callback(...args);
+  });
+};
 export default {
   install: (app) => {
     app.config.globalProperties.$socket = socket;

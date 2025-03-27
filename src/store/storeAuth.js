@@ -1,7 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
-const API_URL_AVATAR = import.meta.env.VITE_API_URL_AVATAR;
 
 export const useAuthStore = defineStore("auth", {
   state: () => ({
@@ -11,6 +10,12 @@ export const useAuthStore = defineStore("auth", {
     login(userData) {
       this.user = userData;
       sessionStorage.setItem("user", JSON.stringify(userData)); // Salva nello storage
+    },
+    setUserId(id) {
+      if (this.user) {
+        this.user.id = id; // Aggiungi o aggiorna l'ID all'interno dell'oggetto user
+        sessionStorage.setItem("user", JSON.stringify(this.user)); // Salva l'utente aggiornato nel sessionStorage
+      }
     },
     logout() {
       this.user = null;
@@ -32,18 +37,17 @@ export const useMessagesStore = defineStore("messages", {
 
 export const useAvatarStore = defineStore("avatarStore", {
   state: () => ({
-    avatars: [],
+    avatars: JSON.parse(sessionStorage.getItem("avatars")) || [],
   }),
   actions: {
     async fetchAvatars() {
+      // if (this.avatars) return;
       try {
         const response = await axios.get(`${API_URL}/avatars`);
-        console.log(response);
-        this.avatars = response.data.avatars.map(
-          (file) => `${API_URL_AVATAR}/${file}`
-        );
+        this.avatars = response.data.avatars;
+        sessionStorage.setItem("avatars", JSON.stringify(this.avatars));
       } catch (error) {
-        throw error;
+        console.error("Errore nel recupero degli avatar:", error);
       }
     },
   },

@@ -29,11 +29,11 @@
                 type="radio"
                 :id="index"
                 name="avatar"
-                :value="index"
+                :value="avatar"
                 v-model="choosenAvatar"
               />
               <label class="avatar-label" :for="index">
-                <img class="avatar-img" :src="avatar" />
+                <img class="avatar-img" :src="`${API_URL_AVATAR}/${avatar}`" />
               </label>
             </div>
           </div>
@@ -161,6 +161,7 @@ import { ref, onBeforeMount } from "vue";
 import { signup } from "../api/authService.js";
 import { useAvatarStore } from "../store/storeAuth.js";
 
+const API_URL_AVATAR = import.meta.env.VITE_API_URL_AVATAR;
 const avatarStore = useAvatarStore();
 const icon = ref(["fas", "lock"]);
 const name = ref("");
@@ -168,7 +169,7 @@ const email = ref("");
 const password = ref("");
 const passwordConfirm = ref("");
 const type = ref("password");
-const choosenAvatar = ref(null);
+const choosenAvatar = ref("avatar_1.png");
 let successMessage = ref("");
 let errorMessage = ref("");
 let errorsBackend = ref([]);

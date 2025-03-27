@@ -87,8 +87,6 @@ import { ref, inject } from "vue";
 import { signin, resendEmail } from "../api/authService.js";
 import { useRouter } from "vue-router";
 import { useAuthStore, useMessagesStore } from "../store/storeAuth.js";
-import { getJWT } from "../api/authService";
-import { jwtDecode } from "jwt-decode";
 
 const socket = inject("socket"); // Usa il socket globale dal plugin
 const authStore = useAuthStore();
@@ -121,13 +119,15 @@ const hendelSignin = async () => {
     email.value = "";
     password.value = "";
     authMessage.setMessage("You are loged in!");
+    router.push("/dashboard");
+    console.log(socket);
     authStore.login({
       isLoggedIn: true,
       name: response.data.user.name,
       avatar: response.data.user.avatar,
     });
-    router.push("/dashboard");
     socketConnect();
+    console.log("socket connected...", socket);
   } catch (err) {
     console.log("Error Response:", err.response);
     errorMessage.value = err.response.data.message;
@@ -136,40 +136,44 @@ const hendelSignin = async () => {
 };
 
 const socketConnect = async () => {
+  console.log("🔄 Tentativo di connessione al socket...");
+
   try {
-    // const token = await handleGetJWT();
-    // if (token) {
-    //   socket.auth = { token }; // Aggiorna il token nel socket globale
-    if (!socket.connected) {
-      socket.connect(); // Assicura che il socket si connetta
+    // Se il socket è disconnesso o non esiste, lo connettiamo
+    if (!socket || !socket.connected) {
+      console.log("⚡ Connessione socket...");
+
+      // Connettiamo il socket
+      socket.connect();
+
+      // Dopo che il socket è connesso, registriamo l'evento "user_data"
+      socket.on("connect", () => {
+        console.log("🔗 Socket connesso!");
+
+        // Rimuoviamo prima il listener "user_data" per evitare duplicati
+        socket.off("user_data");
+
+        // Registriamo il listener "user_data"
+        socket.on("user_data", (data) => {
+          console.log("✅ ID Utente ricevuto:", data.userId);
+          authStore.setUserId({
+            userId: data.userId,
+          });
+        });
+
+        // Richiediamo i dati utente dal server
+        socket.emit("request_user_data");
+      });
     } else {
-      // Se è già connesso, disconnetti e riconnetti con il nuovo token
+      // Se il socket è già connesso, disconnettiamo e riconnettiamo
+      console.log("🔄 Socket già connesso, riconnessione...");
       socket.disconnect();
       socket.connect();
     }
-    // }
   } catch (error) {
     console.error("❌ Errore nella connessione WebSocket:", error);
   }
 };
-
-// const handleGetJWT = async () => {
-//   try {
-//     const response = await getJWT();
-//     console.log("🔑 Token JWT ricevuto:", response);
-//     const decoded = jwtDecode(response.JWT);
-//     console.log("👤 ID Utente:", decoded.id);
-//     // userId.value = decoded.id;
-//     return response.JWT;
-//   } catch (error) {
-//     console.error("❌ Errore nel recuperare il JWT:", error);
-//     if (socket && socket.connected) {
-//       socket.disconnect();
-//       console.log("⚡ Socket disconnesso a causa di errore nel recupero JWT");
-//     }
-//     return null;
-//   }
-// };
 
 const hendleResendEmail = async () => {
   errorsBackend.value = [];

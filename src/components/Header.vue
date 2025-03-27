@@ -12,7 +12,7 @@
         <img
           v-if="authStore.user?.isLoggedIn"
           class="avatar"
-          :src="authStore.user?.avatar"
+          :src="`${API_URL_AVATAR}/${authStore.user?.avatar}`"
           alt="avatar"
           @click="showUserNav = true"
         />
@@ -113,7 +113,7 @@
             @click="showUserNav = false"
           >
             <router-link to="dashboard" class="name-avatar-wrapper">
-              <img :src="authStore.user?.avatar" alt="avatar" />
+              <img :src="`${API_URL_AVATAR}/${authStore.user?.avatar}`" />
               <p class="user-name">{{ authStore.user?.name }}</p>
             </router-link>
           </li>
@@ -148,19 +148,20 @@ import { useRouter } from "vue-router";
 import { useAuthStore, useMessagesStore } from "../store/storeAuth.js";
 import Cookies from "js-cookie";
 
-const socket = inject("socket");
+const API_URL_AVATAR = import.meta.env.VITE_API_URL_AVATAR;
 const authStore = useAuthStore();
 const messagesStore = useMessagesStore();
 const router = useRouter();
 let showNav = ref(false);
+let socket = inject("socket");
 let showUserNav = ref(false);
 let isDesktop = ref(window.innerWidth > 768);
 
 const hendeleLogout = async () => {
   try {
     const response = await logout();
-    Cookies.remove("jwt", { path: "/" });
     socketDisconnect();
+    Cookies.remove("jwt", { path: "/" });
     authStore.login({ isLoggedIn: false });
     messagesStore.setMessage(response.message);
     router.push("/");
@@ -171,17 +172,20 @@ const hendeleLogout = async () => {
 };
 
 const socketDisconnect = () => {
+  console.log("socketDisconnect run...", socket);
   if (socket) {
     // Rimuovi i listener per evitare duplicazioni
-    socket.off("connect"); // Rimuovi il listener precedente per "connect"
-    socket.off("disconnect"); // Rimuovi il listener precedente per "disconnect"
-    socket.off("message"); // Rimuovi il listener precedente per "message"
-    console.log("💥 Eventi WebSocket rimossi");
+    socket.off("connect");
+    socket.off("disconnect");
+    socket.off("message");
+    socket.off("user_data");
+    console.log("💥 Eventi WebSocket rimossi", socket);
     if (socket.connected) {
       socket.disconnect();
-      console.log("⚡ Socket disconnesso");
+      console.log("⚡ Socket disconnesso", socket);
     }
   }
+  // socket = null;
 };
 
 const updateScreenSize = () => {

@@ -22,6 +22,7 @@ const routes = [
   { path: "/signin", component: Signin },
   { path: "/password-forgot", component: PasswordForgot },
   { path: "/chat", component: Chat, meta: { requiresAuth: true } },
+
   {
     path: "/reset-password",
     name: "reset-password",

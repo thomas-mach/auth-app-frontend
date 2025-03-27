@@ -43,17 +43,19 @@ import { useShowHillsStore } from "../src/store/storeAuth";
   flex-direction: column;
   background-image: url(./images/bg-stars.svg);
   height: 100%;
+  z-index: 0;
 }
 
 .header {
   width: 100%;
-  height: 15%;
+  height: 10%;
   /* border: 1px solid rgb(190, 22, 22); */
 }
 
 .main {
   width: 100%;
-  height: 85%;
+  height: 90%;
+  z-index: 50;
   /* border: 1px solid rgb(11, 32, 221); */
 }
 
@@ -68,7 +70,7 @@ import { useShowHillsStore } from "../src/store/storeAuth";
 }
 
 .footer-under {
-  z-index: -100;
+  z-index: 0;
 }
 
 .hills {
@@ -85,6 +87,15 @@ import { useShowHillsStore } from "../src/store/storeAuth";
 @media (min-width: 1140px) {
   .hills {
     transform: translateX(0%);
+  }
+}
+
+@media (min-width: 750px) {
+  .header {
+    height: 15%;
+  }
+  .main {
+    height: 85%;
   }
 }
 </style>
