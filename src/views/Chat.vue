@@ -48,7 +48,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, inject, nextTick, watch } from "vue";
+import {
+  ref,
+  onMounted,
+  onUnmounted,
+  onBeforeMount,
+  inject,
+  nextTick,
+  watch,
+} from "vue";
 import { getMessages } from "../api/messageService";
 import { useAuthStore } from "../store/storeAuth.js";
 
@@ -121,8 +129,11 @@ const adjustHeight = () => {
   }
 };
 
-onMounted(() => {
+onBeforeMount(() => {
   handleGetMessges();
+});
+
+onMounted(() => {
   socket.emit("getUserCount"); // Richiede manualmente il numero di utenti
 
   socket.on("userCount", (count) => {
@@ -140,7 +151,7 @@ onMounted(() => {
     socket.emit("getUserCount"); // Chiede il numero di utenti dopo la connessione
   });
 
-  userId.value = authStore.user.id.userId;
+  userId.value = authStore.user.id;
 });
 
 onUnmounted(() => {

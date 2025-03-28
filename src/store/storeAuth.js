@@ -1,27 +1,34 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import { ref, computed } from "vue";
+
 const API_URL = import.meta.env.VITE_API_URL;
 
-export const useAuthStore = defineStore("auth", {
-  state: () => ({
-    user: JSON.parse(sessionStorage.getItem("user")) || null, // Recupera dallo storage
-  }),
-  actions: {
-    login(userData) {
-      this.user = userData;
-      sessionStorage.setItem("user", JSON.stringify(userData)); // Salva nello storage
-    },
-    setUserId(id) {
-      if (this.user) {
-        this.user.id = id; // Aggiungi o aggiorna l'ID all'interno dell'oggetto user
-        sessionStorage.setItem("user", JSON.stringify(this.user)); // Salva l'utente aggiornato nel sessionStorage
-      }
-    },
-    logout() {
-      this.user = null;
-      sessionStorage.removeItem("user"); // Rimuove dallo storage
-    },
-  },
+export const useAuthStore = defineStore("auth", () => {
+  const user = ref(
+    JSON.parse(localStorage.getItem("user")) || { isLoggedIn: false }
+  );
+
+  const isLoggedIn = computed(() => user.value?.isLoggedIn || false);
+
+  function login(userData) {
+    user.value = userData;
+    localStorage.setItem("user", JSON.stringify(userData));
+  }
+
+  function setUserId(id) {
+    if (user.value) {
+      user.value = { ...user.value, id };
+      localStorage.setItem("user", JSON.stringify(user.value));
+    }
+  }
+
+  function logout() {
+    user.value = { isLoggedIn: false };
+    localStorage.removeItem("user");
+  }
+
+  return { user, isLoggedIn, login, logout, setUserId };
 });
 
 export const useMessagesStore = defineStore("messages", {
@@ -37,7 +44,7 @@ export const useMessagesStore = defineStore("messages", {
 
 export const useAvatarStore = defineStore("avatarStore", {
   state: () => ({
-    avatars: JSON.parse(sessionStorage.getItem("avatars")) || [],
+    avatars: JSON.parse(localStorage.getItem("avatars")) || [],
   }),
   actions: {
     async fetchAvatars() {
@@ -45,7 +52,7 @@ export const useAvatarStore = defineStore("avatarStore", {
       try {
         const response = await axios.get(`${API_URL}/avatars`);
         this.avatars = response.data.avatars;
-        sessionStorage.setItem("avatars", JSON.stringify(this.avatars));
+        localStorage.setItem("avatars", JSON.stringify(this.avatars));
       } catch (error) {
         console.error("Errore nel recupero degli avatar:", error);
       }

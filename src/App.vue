@@ -30,15 +30,15 @@ import { useShowHillsStore } from "../src/store/storeAuth";
 
 <style scoped>
 .app-wrapper {
-  position: fixed;
+  position: relative;
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   background: linear-gradient(#1d1e28, #261a2d);
   /* border: 1px solid rgb(144, 234, 0); */
 }
 
 .stars {
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   background-image: url(./images/bg-stars.svg);

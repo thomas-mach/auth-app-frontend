@@ -156,9 +156,7 @@ const socketConnect = async () => {
         // Registriamo il listener "user_data"
         socket.on("user_data", (data) => {
           console.log("✅ ID Utente ricevuto:", data.userId);
-          authStore.setUserId({
-            userId: data.userId,
-          });
+          authStore.setUserId(data.userId);
         });
 
         // Richiediamo i dati utente dal server
